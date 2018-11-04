@@ -1,4 +1,4 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function($) {
 
   // Header fixed and Back to top button
   $(window).scroll(function() {
@@ -131,33 +131,24 @@ jQuery(document).ready(function() {
 const url = '//static/process.php';
 const form = document.querySelector('form');
 
-    function checkImageExists(imageUrl, callBack) {
-        var imageData = new Image();
-        imageData.onload = function() {
-            callBack(true);
-        };
-        imageData.onerror = function() {
-            callBack(false);
-        };
-        imageData.src = imageUrl;
+form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    const files = document.querySelector('[type=file]').files;
+    const formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+
+        formData.append('files[]', file);
     }
 
-    $('#ok_button').click(function(){
-      console.log("Hello World")
-        var inp = $('#insert_image').val();
-        //allows user to enter nothing in the artwork section
-
-        checkImageExists(inp, function (existsImage) {
-            if (existsImage == true) {
-                alert('image exists!')
-            }
-            else {
-                alert('image does not exist!')
-            }
-            });
-
-        //allows user to exit window
-        allowedToExit = true;
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        console.log(response);
     });
+});
 
 });

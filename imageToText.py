@@ -6,26 +6,26 @@ import cv2
 import os
 
 # construct the argument parse and parse the arguments
-"""ap = argparse.ArgumentParser()
+ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required=True,
                 help="path to input image to be OCR'd")
 ap.add_argument("-p", "--preprocess", type=str, default="thresh",
                 help="type of preprocessing to be done")
-args = vars(ap.parse_args())"""
+args = vars(ap.parse_args())
 
 # load the example image and convert it to grayscale
-image = cv2.imread(#IMAGE TO READ - MUST BE STORED IN PROJECT DIRECTORY OR ENTER FULL PATH NAME)
+image = cv2.imread(args["image"])
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # check to see if we should apply thresholding to preprocess the
 # image
-if "R4.JPG" == "thresh":
+if args["preprocess"] == "thresh":
     gray = cv2.threshold(gray, 0, 255,
                          cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
 
 # make a check to see if median blurring should be done to remove
 # noise
-elif "R4.JPG" == "blur":
+elif args["preprocess"] == "blur":
     gray = cv2.medianBlur(gray, 3)
 
 # write the grayscale image to disk as a temporary file so we can
@@ -39,11 +39,7 @@ text = pytesseract.image_to_string(Image.open(filename))
 os.remove(filename)
 print(text)
 
-file = open("testfile.txt","w")
-file.write(text)
-
-
-"""from pytesseract import image_to_string
-print (image_to_string(Image.open('R2.JPG')))
-print (image_to_string(Image.open('R2.JPG'), lang='eng'))"""
-
+# show the output images
+cv2.imshow("Image", image)
+cv2.imshow("Output", gray)
+cv2.waitKey(0)
