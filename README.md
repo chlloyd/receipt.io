@@ -1,2 +1,2 @@
 # Receipt.io
-Reads Receipts and adds then to a database. 
+Reads Receipts and adds them to a database. 
